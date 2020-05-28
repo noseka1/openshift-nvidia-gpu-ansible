@@ -1,0 +1,34 @@
+- name: Deploy NFD operator
+  k8s:
+    definition: "{{ lookup('template', 'nfd/nfd-subscription.yaml') }}"
+
+- name: Wait for NFD operator to deploy
+  import_tasks: wait_for_operator.yml
+  vars:
+    operator_name: nfd
+    operator_namespace: openshift-operators
+
+- name: Deploy NFD instance
+  k8s:
+    definition: "{{ lookup('template', '{{ item }}') }}"
+  loop:
+    - nfd/nfd-namespace.yaml
+    - nfd/nfd-master-server-nodefeaturediscovery.yaml
+
+- name: Deploy GPU operator
+  k8s:
+    definition: "{{ lookup('template', '{{ item }}') }}"
+  loop:
+    - gpu/gpu-operator-namespace.yaml
+    - gpu/gpu-operator-operatorgroup.yaml
+    - gpu/gpu-operator-subscription.yaml
+
+- name: Wait for GPU operator to deploy
+  import_tasks: wait_for_operator.yml
+  vars:
+    operator_name: gpu-operator
+    operator_namespace: '{{ gpu_namespace }}'
+
+- name: Deploy GPU instance
+  k8s:
+    definition: "{{ lookup('template', 'gpu/nvidia-gpu-clusterpolicy.yaml') }}"

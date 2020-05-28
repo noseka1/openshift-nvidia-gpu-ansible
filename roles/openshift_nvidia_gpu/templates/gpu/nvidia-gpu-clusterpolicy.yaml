@@ -1,0 +1,24 @@
+apiVersion: nvidia.com/v1
+kind: ClusterPolicy
+metadata:
+  name: nvidia-gpu
+  namespace: {{ gpu_namespace }}
+spec:
+  dcgmExporter:
+    image: dcgm-exporter
+    repository: nvidia
+    version: 1.7.2-2.0.0-rc.9-ubi8
+  devicePlugin:
+    image: k8s-device-plugin
+    repository: nvidia
+    version: 1.0.0-beta6-ubi8
+  driver:
+    image: driver
+    repository: nvidia
+    version: 440.64.00
+  operator:
+    defaultRuntime: crio
+  toolkit:
+    image: container-toolkit
+    repository: nvidia
+    version: 1.0.2-ubi8
