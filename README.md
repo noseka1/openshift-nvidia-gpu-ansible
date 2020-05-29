@@ -23,7 +23,7 @@ $ ansible-playbook openshift_nfd.yml
 
 This section is based on the instructions found at [How to use entitled image builds on Red Hat OpenShift Container Platform 4.x cluster ?](https://access.redhat.com/solutions/4908771) Follow the instructions in the Downloading certificates section of that article in order to obtain a xxxx_certificates.zip archive with certificates.
 
-Insert the base-64 encoded content of the xxxx_certificates.zip/consumer_export.zip/export/entitlement_certificates/xxxxx.pem into the manifest ./rhel-entitlements/base/50-entitlement-key-pem-machineconfig.yaml and ./rhel-entitlements/base/50-entitlement-pem-machineconfig.yaml     .
+Insert the certificate and key from xxxx_certificates.zip/consumer_export.zip/export/entitlement_certificates/xxxxx.pem into roles/openshift_rhel_entitlements/defaults/main.yml.
 
 > :exclamation: Applying the machineconfigs to the cluster will cause all worker nodes to restart.
 
