@@ -1,0 +1,17 @@
+- name: Check that certificate is defined
+  fail:
+    msg: Certificate is missing
+  when: rhel_entitlements_cert is not defined or rhel_entitlements_cert == ''
+
+- name: Check that key is defined
+  fail:
+    msg: Private key is missing
+  when: rhel_entitlements_key is not defined or rhel_entitlements_key == ''
+
+- name: Configure RHEL entitlements
+  k8s:
+    definition: "{{ lookup('template', '{{ item }}') }}"
+  loop:
+    - 50-entitlement-key-pem-machineconfig.yaml
+    - 50-entitlement-pem-machineconfig.yaml
+    - 50-rhsm-conf-machineconfig.yaml
