@@ -17,3 +17,15 @@
 - name: Deploy GPU instance
   k8s:
     definition: "{{ lookup('template', 'nvidia-gpu-clusterpolicy.yaml') }}"
+
+- name: Wait for pod to complete
+  import_tasks: wait_for_pod.yml
+  vars:
+    pod_name: nvidia-device-plugin-validation
+    pod_namespace: '{{ gpu_namespace }}'
+
+- name: Wait for pod to complete
+  import_tasks: wait_for_pod.yml
+  vars:
+    pod_name: nvidia-driver-validation
+    pod_namespace: '{{ gpu_namespace }}'
