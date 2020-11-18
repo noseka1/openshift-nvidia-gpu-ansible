@@ -2,8 +2,6 @@
   k8s:
     definition: "{{ lookup('template', '{{ item }}') }}"
   loop:
-    - gpu-operator-namespace.yaml
-    - gpu-operator-operatorgroup.yaml
     - gpu-operator-subscription.yaml
 
 - name: Wait for GPU operator to deploy
@@ -12,11 +10,14 @@
     tasks_from: wait_for_operator.yml
   vars:
     operator_name: gpu-operator
-    operator_namespace: '{{ gpu_namespace }}'
+    operator_namespace: openshift-operators
 
 - name: Deploy GPU instance
   k8s:
-    definition: "{{ lookup('template', 'nvidia-gpu-clusterpolicy.yaml') }}"
+    definition: "{{ lookup('template', '{{ item }}') }}"
+  loop:
+    - gpu-operator-namespace.yaml
+    - nvidia-gpu-clusterpolicy.yaml
 
 - name: Wait for pod to complete
   import_tasks: wait_for_pod.yml
